@@ -33,7 +33,7 @@ def decode_mime(value):
 
 
 def html_to_text(html):
-    html = re.sub(r'(?is)<(script|style).*?>.*?</\\1>', ' ', html)
+    html = re.sub(r'(?is)<(script|style).*?>.*?</\1>', ' ', html)
     html = re.sub(r'(?i)<br\s*/?>', '\n', html)
     html = re.sub(r'(?i)</p>|</div>|</li>|</tr>|</h\d>', '\n', html)
     html = re.sub(r'<[^>]+>', ' ', html)
@@ -42,13 +42,6 @@ def html_to_text(html):
     html = re.sub(r'\n{3,}', '\n\n', html)
     html = re.sub(r'[ \t]{2,}', ' ', html)
     return html.strip()
-
-
-def normalize_body(text):
-    text = text or ''
-    text = re.sub(r'\r', '', text)
-    text = re.sub(r'\s+', ' ', text)
-    return text.strip()
 
 
 def extract_body(msg):
@@ -85,7 +78,7 @@ def extract_body(msg):
             else:
                 plain_text = text.strip()
     body = plain_text or html_text or ''
-    body = normalize_body(body)
+    body = re.sub(r'\n{3,}', '\n\n', body).strip()
     return body[:MAX_BODY]
 
 
