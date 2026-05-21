@@ -77,9 +77,13 @@ def extract_body(msg):
                 html_text = html_to_text(text)
             else:
                 plain_text = text.strip()
-    body = plain_text or html_text or ''
-    body = re.sub(r'\n{3,}', '\n\n', body).strip()
-    return body[:MAX_BODY]
+body = plain_text or html_text or ''
+body = re.sub(r'\r', '', body)
+body = re.sub(r'\n+', '\n', body)
+body = re.sub(r'[ \t]+', ' ', body)
+body = re.sub(r' *\n *', '\n', body)
+body = body.strip()
+return body[:MAX_BODY]
 
 
 def telegram_send(text):
